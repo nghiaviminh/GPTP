@@ -1,0 +1,8 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/GPTP/.vs
+/GPTP/Debug
+/GPTP/Release
+/GPTP/GPTP.vcxproj.user

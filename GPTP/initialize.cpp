@@ -121,6 +121,7 @@
 #include "hooks/orders/warpin.h"
 #include "hooks/interface/status_display/wireframe.h"
 #include "hooks/weapons/wpnspellhit.h"
+#include <hooks/orders/doodad_orders.h>
 
 /// This function is called when the plugin is loaded into StarCraft.
 /// You can enable/disable each group of hooks by commenting them.
