@@ -1209,6 +1209,7 @@ bool CUnit::unitIsTrainingOrMorphing() {
 		MOV result, EAX
 		POPAD
 	}
+	return (bool)result;
 }
 
 bool CUnit::isQueueSlotActive(int slot) {
