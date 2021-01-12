@@ -4,26 +4,41 @@
 #include <DebugUtils.h>
 
 namespace {
-	void __declspec(naked) injectParseRequirementOpcodesWrapper() //0x0046D610
+	void __declspec(naked) getParseRequirementOpcodesWrapper() //0x0046D610
 	{
-		static s32 result;
-		static s32 datReqOffset;
-		static s16 techID;
 		static CUnit* unit;
-		static s32 playerId;
-		//__asm {
+		static u32 datReqOffset;
+		static u32 techID;
+		static u32 playerId;
+		static u16* datReqBase;
+		static s32 result;
 
-		//}
+		__asm {
+			push ebp
+			mov ebp, esp
+			mov datReqOffset, eax
+			mov unit, esi
+			mov eax, [ebp + 8]
+			mov techID, eax
+			mov eax, [ebp + 12]
+			mov playerId, eax
+			mov eax, [ebp + 16]
+			mov datReqBase, eax
+			pushad
+		}
 		result = hooks::parseRequirementOpcodes(unit, datReqOffset, techID, playerId);
 		DebugOut("parseRequirementOpcodes returned %d for: techID %d, unit %d, playerID %d\n\n\n", result, techID, unit->id, playerId);
-		//__asm {
-
-		//}
+		__asm {
+			popad
+			mov eax, result
+			pop ebp
+			retn 12
+		}
 	}
 }
 
 namespace hooks {
 	void injectParseRequirementOpcodesWrapper() {
-		//jmpPatch(parseRequirementOpcodes, 0x0046D610, 0);
+		jmpPatch(getParseRequirementOpcodesWrapper, 0x0046D610, 0);
 	}
 }

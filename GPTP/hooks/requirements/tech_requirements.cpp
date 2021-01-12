@@ -7,9 +7,7 @@ namespace {
 }
 
 namespace hooks {
-
 	s32 parseRequirementOpcodes(CUnit* unit, u32 datReqOffset, u16 techID, u32 player) {
-
 		u16* datReqBase = requirements::tech;
 		s32 result = parseRequirementOpcodesLogic(unit, datReqOffset, techID, player, datReqBase);
 		return result;
@@ -43,7 +41,7 @@ namespace {
 		// 'Or' logic tracking
 		u32 success = 0; // Has integer values added to it, but is essentially treated like a boolean
 
-		u16 opcode;
+		u16 opcode = 0;
 		u16 unitid;
 		u16 findopcode; // for upgrade level opcode
 
