@@ -376,6 +376,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AI\spells\defensive_matrix.h" />
+    <ClInclude Include="DebugUtils.h" />
     <ClInclude Include="definitions.h" />
     <ClInclude Include="graphics\Bitmap.h" />
     <ClInclude Include="graphics\draw_hook.h" />
@@ -534,6 +535,9 @@
     <ClInclude Include="SCBW\structures\Target.h" />
     <ClInclude Include="SCBW\UnitFinder.h" />
     <ClInclude Include="types.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DebugUtils.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
