@@ -121,7 +121,6 @@
 #include "hooks/orders/warpin.h"
 #include "hooks/interface/status_display/wireframe.h"
 #include "hooks/weapons/wpnspellhit.h"
-#include <hooks/orders/doodad_orders.h>
 #include "hooks/orders/doodad_orders.h"
 #include "hooks/requirements/unit_requirements.h"
 #include "hooks/requirements/order_requirements.h"
