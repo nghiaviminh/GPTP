@@ -28,10 +28,10 @@ namespace {
 		result = hooks::parseRequirementOpcodes(unit, datReqOffset, techID, playerId, datReqBase);
 
 		if (datReqBase == requirements::upgrade) {
-			DebugOut("parseRequirementOpcodes upgrades returned %d for: id %d, unit %d, playerID %d (datReqOffset=%d, datReqBase=%p)\n\n\n", result, techID, unit->id, playerId, datReqOffset, datReqBase);
+			//DebugOut("parseRequirementOpcodes upgrades returned %d for: id %d, unit %d, playerID %d (datReqOffset=%d, datReqBase=%p)\n\n\n", result, techID, unit->id, playerId, datReqOffset, datReqBase);
 		}
 		else {
-			DebugOut("parseRequirementOpcodes returned %d for: techID %d, unit %d, playerID %d (datReqOffset=%d, datReqBase=%p)\n\n\n", result, techID, unit->id, playerId, datReqOffset, datReqBase);
+			//DebugOut("parseRequirementOpcodes returned %d for: techID %d, unit %d, playerID %d (datReqOffset=%d, datReqBase=%p)\n\n\n", result, techID, unit->id, playerId, datReqOffset, datReqBase);
 		}
 		__asm {
 			popad
