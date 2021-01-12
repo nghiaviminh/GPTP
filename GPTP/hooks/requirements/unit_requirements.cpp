@@ -8,8 +8,6 @@ namespace {
 }
 
 namespace hooks {
-
-
 	s8 UnitCreateAllowed(u16 unitId, CUnit* parentUnit, int playerID) { //0046E1C0
 		u16* unitsDat = units_dat::unitsDat43;
 		u16* requirementsTable = requirements::units;

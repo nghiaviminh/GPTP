@@ -33,10 +33,7 @@ namespace {
 }
 
 namespace hooks {
-
-	void injectUnitCreateRequirementsWrapper() {
+	void injectUnitCreateAllowedWrapper() {
 		jmpPatch(getUnitCreateAllowedWrapper, 0x0046E1C0, 0);
 	}
-
 }
-
