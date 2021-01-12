@@ -1,15 +1,17 @@
 #include "tech_requirements.h"
 #include "SCBW/structures/Player.h"
 #include <SCBW/api.h>
+#include <DebugUtils.h>
+
 
 namespace {
-	s32 parseRequirementOpcodesLogic(CUnit* unit, u32 datReqOffset, u16 techID, u32 player, u16* datReqBase);
+	s32 parseRequirementOpcodesLogic(CUnit* unit, u32 datReqOffset, u16 id, u32 player, u16* datReqBase);
 }
 
 namespace hooks {
-	s32 parseRequirementOpcodes(CUnit* unit, u32 datReqOffset, u16 techID, u32 player, u16* datReqBase) {
+	s32 parseRequirementOpcodes(CUnit* unit, u32 datReqOffset, u16 id, u32 player, u16* datReqBase) {
 		// Here we would do overrides to datReqOffset and datReqBase if needed
-		s32 result = parseRequirementOpcodesLogic(unit, datReqOffset, techID, player, datReqBase);
+		s32 result = parseRequirementOpcodesLogic(unit, datReqOffset, id, player, datReqBase);
 		return result;
 	}
 }
@@ -23,12 +25,12 @@ namespace {
 	//  0: Blank
 	// -1: Grey
 
-	s32 parseRequirementOpcodesLogic(CUnit* unit, u32 datReqOffset, u16 techID, u32 player, u16* datReqBase) {
+	s32 parseRequirementOpcodesLogic(CUnit* unit, u32 datReqOffset, u16 id, u32 playerId, u16* datReqBase) {
 		// args:
 		// eax          u32    dat req offset
 		// esi          CUnit* unit
 		// ebp+8  arg1  u16    tech/upg ID
-		// ebp+c  arg2  u32    player
+		// ebp+c  arg2  u32    playerId
 		// ebp+10 arg3  u16*   dat req script ptr
 
 		  // janky 'Current Unit Is...' logic variables
@@ -41,12 +43,20 @@ namespace {
 		// 'Or' logic tracking
 		u32 success = 0; // Has integer values added to it, but is essentially treated like a boolean
 
-		u16 opcode = 0;
+		u16 opcode;
 		u16 unitid;
 		u16 findopcode; // for upgrade level opcode
 
+		if (datReqBase == requirements::upgrade) {
+			DebugOut("parseRequirementOpcodes upgrades for: upgradeId %d, unit %d, playerID %d (datReqOffset=%d, datReqBase=%p)\n\n\n", id, unit->id, playerId, datReqOffset, datReqBase);
+		}
+		else {
+			DebugOut("parseRequirementOpcodes research for: techId %d, unit %d, playerID %d (datReqOffset=%d, datReqBase=%p)\n\n\n", id, unit->id, playerId, datReqOffset, datReqBase);
+		}
+
+
 		while (datReqBase[datReqOffset] != 0xFFFF) {
-			opcode == datReqBase[datReqOffset++];
+			opcode = datReqBase[datReqOffset++];
 			switch (opcode) {
 			case 0xFF24: // Must be Brood War
 				if (scbw::isBroodWarMode() == false) {
@@ -58,7 +68,7 @@ namespace {
 
 			case 0xFF02: // Current Unit Is...
 				unitid = datReqBase[datReqOffset++];
-				if (PLAYER::numberOfCompletedUnitsOfType(unitid, player) != 0) {
+				if (PLAYER::numberOfCompletedUnitsOfType(unitid, playerId) != 0) {
 					greyButton = false;
 				}
 				if (unit->id != unitid) {
@@ -73,7 +83,7 @@ namespace {
 
 			case 0xFF03: // Must have...
 				unitid = datReqBase[datReqOffset++];
-				success += PLAYER::numberOfCompletedUnitsOfType(unitid, player) + PLAYER::numberOfUnitsOfType(unitid, player);
+				success += PLAYER::numberOfCompletedUnitsOfType(unitid, playerId) + PLAYER::numberOfUnitsOfType(unitid, playerId);
 				break;
 
 			case 0xFF18: // Is transport
@@ -84,11 +94,11 @@ namespace {
 				break;
 
 			case 0xFF0F: // Must be researched
-				if (techID == TechId::Burrowing && unit->id == UnitId::lurker) {
+				if (id == TechId::Burrowing && unit->id == UnitId::lurker) {
 					success++;
 					break;
 				}
-				if (scbw::hasTechResearched(player, techID) == false && scbw::isCheatEnabled(CheatFlags::MedievalMan) == false) {
+				if (scbw::hasTechResearched(playerId, id) == false && scbw::isCheatEnabled(CheatFlags::MedievalMan) == false) {
 					break;
 				}
 				success++;
@@ -171,47 +181,44 @@ namespace {
 				break;
 
 			case 0xFF26: // Is burrowed
-				if ((unit->status & UnitStatus::Burrowed) == 0){
-				*lastInternalErr = 5;
-				return 0;
-			}
-			success++;
-			break;
+				if ((unit->status & UnitStatus::Burrowed) == 0) {
+					*lastInternalErr = 5;
+					return 0;
+				}
+				success++;
+				break;
 
 			case 0xFF12: // Can attack -- duplicate of "Is lifted off"???
-				if ((unit->status & UnitStatus::GroundedBuilding) != 0){
-				*lastInternalErr = 19;
-				return 0;
-			}
-			success++;
-			break;
+				if ((unit->status & UnitStatus::GroundedBuilding) != 0) {
+					*lastInternalErr = 19;
+					return 0;
+				}
+				success++;
+				break;
 
 			case 0xFF13: // Can set rally point -- duplicate of "Is lifted off"???
-				if ((unit->status & UnitStatus::GroundedBuilding) == 0){
-				*lastInternalErr = 19;
-				return 0;
-			}
-			success++;
-			break;
+				if ((unit->status & UnitStatus::GroundedBuilding) == 0) {
+					*lastInternalErr = 19;
+					return 0;
+				}
+				success++;
+				break;
 
 			case 0xFF14: // Can move
-				if ((unit->status & UnitStatus::GroundedBuilding) != 0){
-				*lastInternalErr = 19;
-				return 0;
-			}
-			if ((unit->id == UnitId::lurker || (unit->status & UnitStatus::Burrowed) == 0) && units_dat::RightClickAction[unit->id] == RightClickActions::NoCommand_AutoAttack) {
-				*lastInternalErr = 19;
-				return 0;
-			}
-			if (unit->getRightClickActionOrder() == RightClickActions::NoMove_NormalAttack) {
-				// getRightClickActionOrder 004E5EA0 0000003A
-				// GPTP\hooks\orders\base_orders\attack_orders.cpp(1908)
-				// GPTP\hooks\right_click_CMDACT.cpp(509)
-				*lastInternalErr = 19;
-				return 0;
-			}
-			success++;
-			break;
+				if ((unit->status & UnitStatus::GroundedBuilding) != 0) {
+					*lastInternalErr = 19;
+					return 0;
+				}
+				if ((unit->id == UnitId::lurker || (unit->status & UnitStatus::Burrowed) == 0) && units_dat::RightClickAction[unit->id] == RightClickActions::NoCommand_AutoAttack) {
+					*lastInternalErr = 19;
+					return 0;
+				}
+				if (unit->getRightClickActionOrder() == RightClickActions::NoMove_NormalAttack) {
+					*lastInternalErr = 19;
+					return 0;
+				}
+				success++;
+				break;
 
 			case 0xFF15: // Has weapon
 				if (unit->hasWeapon() == false) {
@@ -275,7 +282,7 @@ namespace {
 				break;
 
 			case 0xFF1F: // Upgrade Lv-1 Require...
-				switch (scbw::getUpgradeLevel(player, techID)) {
+				switch (scbw::getUpgradeLevel(playerId, id)) {
 				default:
 					findopcode = 0xFF1F; // Upgrade Lv-1 Require...
 					break;
@@ -302,7 +309,7 @@ namespace {
 			default:
 				// Any invalid opcodes will be read here as unit IDs
 				unitid = datReqBase[datReqOffset++];
-				success += PLAYER::numberOfCompletedUnitsOfType(player, unitid);
+				success += PLAYER::numberOfCompletedUnitsOfType(playerId, unitid);
 			}
 
 			if (datReqBase[datReqOffset] == 0xFF01) { // Or
