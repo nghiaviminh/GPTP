@@ -122,6 +122,12 @@
 #include "hooks/interface/status_display/wireframe.h"
 #include "hooks/weapons/wpnspellhit.h"
 #include <hooks/orders/doodad_orders.h>
+#include "hooks/orders/doodad_orders.h"
+#include "hooks/requirements/unit_requirements.h"
+#include "hooks/requirements/order_requirements.h"
+#include "hooks/requirements/upgrade_requirements.h"
+#include "hooks/requirements/tech_requirements.h"
+#include "hooks/requirements/research_requirements.h"
 
 /// This function is called when the plugin is loaded into StarCraft.
 /// You can enable/disable each group of hooks by commenting them.
@@ -261,6 +267,9 @@ BOOL WINAPI Plugin::InitializePlugin(IMPQDraftServer *lpMPQDraftServer) {
 	hooks::injectWeaponRangeHooks();
 	
 	hooks::injectUnitTooltipHook();
+
+	hooks::injectUnitCreateAllowedWrapper();
+	hooks::injectParseRequirementOpcodesWrapper();
 
 	//fixes to make sc1 campaign playable from firegraft/mpqgraft self-executables
 	//jmpPatch((void*)0x150182D0, 0x004101AE);
