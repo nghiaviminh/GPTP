@@ -48,10 +48,10 @@ namespace {
 		u16 findopcode; // for upgrade level opcode
 
 		if (datReqBase == requirements::upgrade) {
-			DebugOut("parseRequirementOpcodes upgrades for: upgradeId %d, unit %d, playerID %d (datReqOffset=%d, datReqBase=%p)\n\n\n", id, unit->id, playerId, datReqOffset, datReqBase);
+			DebugOut("parseRequirementOpcodes upgrades for: upgradeId %d, unit %d, playerID %d (datReqOffset=%d, datReqBase=%p)", id, unit->id, playerId, datReqOffset, datReqBase);
 		}
 		else {
-			DebugOut("parseRequirementOpcodes research for: techId %d, unit %d, playerID %d (datReqOffset=%d, datReqBase=%p)\n\n\n", id, unit->id, playerId, datReqOffset, datReqBase);
+			DebugOut("parseRequirementOpcodes research for: techId %d, unit %d, playerID %d (datReqOffset=%d, datReqBase=%p)", id, unit->id, playerId, datReqOffset, datReqBase);
 		}
 
 
