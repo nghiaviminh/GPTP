@@ -517,3 +517,37 @@ namespace UnitCreateRequirementOpcodes {
 	};
 }
 
+/*
+* Contains Internal error codes returned from functions (hooks\requirements\)
+* Apparently used to signal to the AI when requirements fail
+*/
+namespace InternalErrors {
+	enum Enum {
+		UnknownError0 = 0,
+		UnknownError1 = 1,
+		UnknownError2 = 2,
+		UnknownError3 = 3,
+		UnknownError4 = 4,
+		UnknownError5 = 5,
+		UnknownError6 = 6,
+		UnknownError7 = 7,
+		UnitBusyOrIncompatible = 8,
+		UnknownError9 = 9,
+		UnitFrozen = 10,
+		UnitBurrowed = 11,
+		UnknownError12 = 12,
+		UnknownError13 = 13,
+		UnknownError14 = 14,
+		UnknownError15 = 15,
+		UnknownError16 = 16,
+		UnknownError17 = 17,
+		UnknownError18 = 18,
+		UnknownError19 = 19,
+		UnknownError20 = 20,
+		UnknownError21 = 21,
+		UnknownError22 = 22,
+		MissingRequirement = 23,
+		UnknownError25 = 25,
+		UnknownError26 = 26,
+	};
+}
