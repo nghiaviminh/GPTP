@@ -386,7 +386,10 @@ struct CUnit: public CUnitLayout {
   bool unitIsTrainingOrMorphing();
 
   /// Returns whether the unit is currently constructing a Protoss building
-  bool CUnit::isQueueSlotActive(int slot);
+  bool isQueueSlotActive(int slot);
+
+  // Returns the right click action for the given unit
+  u8 getRightClickActionOrder();
 
   //////////////////////////////////////////////////////////////// @}
 };

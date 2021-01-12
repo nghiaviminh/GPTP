@@ -1215,3 +1215,23 @@ bool CUnit::isQueueSlotActive(int slot) {
 	assert(this);
 	return this->buildQueue[(slot + (unsigned __int8)this->buildQueueSlot) % 5] <= (unsigned __int16)UnitId::Spell_DisruptionWeb;
 }
+
+u8 CUnit::getRightClickActionOrder() {
+	u8 result;
+	if (this->id == UnitId::ZergLurker && this->status & UnitStatus::Burrowed)
+		result = RightClickActions::NoMove_NormalAttack;
+	else {
+		u8 temp_result = units_dat::RightClickAction[this->id];
+
+		if (
+			temp_result == RightClickActions::NoCommand_AutoAttack &&
+			this->status & UnitStatus::GroundedBuilding &&
+			this->isFactory()
+			)
+			result = RightClickActions::NormalMove_NoAttack;
+		else
+			result = temp_result;
+
+	}
+	return result;
+}
