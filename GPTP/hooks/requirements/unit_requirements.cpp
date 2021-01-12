@@ -15,6 +15,7 @@ namespace hooks {
 		u16* requirementsTable = requirements::units;
 
 		// Overriding probe for now as proof of concept
+		/*
 		if (unitId == UnitId::ProtossProbe) {
 			u16 unitsDatCustom[228];
 			unitsDatCustom[UnitId::ProtossProbe] = 11;
@@ -29,6 +30,7 @@ namespace hooks {
 			customRequirementsTable[15] = UnitCreateRequirementOpcodes::EndOfSublist;
 			requirementsTable = customRequirementsTable;
 		}
+		*/
 		return UnitCreateAllowedLogic(unitId, parentUnit, playerID, unitsDat, requirementsTable);
 	}
 }
