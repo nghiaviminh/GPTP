@@ -45,6 +45,9 @@ SCBW_DATA(BUTTON_SET*,	  buttonSetTable, 0x005187E8);
 
 SCBW_DATA(ActionPointer*, actionTable,    0x00512800);  //From triggers.cpp
 
+SCBW_DATA(UNITS*, completedUnitCount, 0x00584DE4);
+SCBW_DATA(UNITS*, allUnitCount, 0x00582324);
+
 //This was in the InitializePlugin() code in qdp.cpp.
 //Not sure what this does, so I'm leaving it as a comment.
 //actionTable[59] = &EnableDebugModeAction;
@@ -426,6 +429,7 @@ SCBW_DATA(CUnit**,  activePortraitUnit,   0x00597248);
 SCBW_DATA(AI_Main*,       AIScriptController,   0x0068FEE8);
 SCBW_DATA(AiCaptain* const*, AiRegionCaptains,  0x0069A604);
 SCBW_DATA(u32*,           aiSupplyReserved,     0x006CA4BC);
+SCBW_DATA(u32*,           lastInternalErr,      0x0066FF60);
 
 //-------- Internal constants --------//
 

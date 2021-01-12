@@ -31,6 +31,10 @@ struct UNITDEATHS {
   u32        player[12];
 };
 
+struct UNITS {
+  u32        player[12];
+};
+
 //Based on http://code.google.com/p/bwapi/source/browse/branches/bwapi4/bwapi/BWAPI/Source/BW/CImage.h
 
 struct TEXT {
