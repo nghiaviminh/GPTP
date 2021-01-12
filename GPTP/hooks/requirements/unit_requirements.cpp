@@ -1,4 +1,5 @@
 #include "unit_requirements.h"
+#include "requirements.h"
 #include <DebugUtils.h>
 #include "SCBW/structures/Player.h"
 
@@ -12,23 +13,11 @@ namespace hooks {
 		u16* unitsDat = units_dat::unitsDat43;
 		u16* requirementsTable = requirements::units;
 
-		// Overriding probe for now as proof of concept
-		/*
-		if (unitId == UnitId::ProtossProbe) {
-			u16 unitsDatCustom[228];
-			unitsDatCustom[UnitId::ProtossProbe] = 11;
-			unitsDat = unitsDatCustom;
-
-			u16 customRequirementsTable[1000];
-			customRequirementsTable[10] = UnitId::ProtossProbe;
-			customRequirementsTable[11] = UnitCreateRequirementOpcodes::CurrentUnitIs;
-			customRequirementsTable[12] = UnitId::ProtossNexus;
-			customRequirementsTable[13] = UnitId::ProtossPylon;
-			customRequirementsTable[14] = UnitCreateRequirementOpcodes::IsNotConstructingAddon;
-			customRequirementsTable[15] = UnitCreateRequirementOpcodes::EndOfSublist;
-			requirementsTable = customRequirementsTable;
+		if (customRequirements::getUnitRequirementOverrides()[unitId] != 0) {
+			unitsDat = customRequirements::getUnitRequirementOverrides();
+			requirementsTable = customRequirements::getUnitRequirementOpcodes();;
 		}
-		*/
+
 		return UnitCreateAllowedLogic(unitId, parentUnit, playerID, unitsDat, requirementsTable);
 	}
 }
