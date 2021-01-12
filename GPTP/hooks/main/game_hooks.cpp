@@ -5,6 +5,8 @@
 #include <SCBW/api.h>
 #include "../psi_field.h"
 #include <cstdio>
+#include "hooks/requirements/requirements.h"
+
 
 namespace hooks {
 
@@ -37,6 +39,7 @@ bool nextFrame() {
 }
 
 bool gameOn() {
+	customRequirements::parseUnitRequirementOverrides();
 	return true;
 }
 
