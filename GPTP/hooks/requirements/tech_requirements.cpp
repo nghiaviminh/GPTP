@@ -7,8 +7,8 @@ namespace {
 }
 
 namespace hooks {
-	s32 parseRequirementOpcodes(CUnit* unit, u32 datReqOffset, u16 techID, u32 player) {
-		u16* datReqBase = requirements::tech;
+	s32 parseRequirementOpcodes(CUnit* unit, u32 datReqOffset, u16 techID, u32 player, u16* datReqBase) {
+		// Here we would do overrides to datReqOffset and datReqBase if needed
 		s32 result = parseRequirementOpcodesLogic(unit, datReqOffset, techID, player, datReqBase);
 		return result;
 	}
