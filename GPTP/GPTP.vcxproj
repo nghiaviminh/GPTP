@@ -368,6 +368,7 @@
     <ClCompile Include="Plugin.cpp" />
     <ClCompile Include="plugin_main.cpp" />
     <ClCompile Include="SCBW\api.cpp" />
+    <ClCompile Include="SCBW\SFileReader.cpp" />
     <ClCompile Include="SCBW\structures\CImage.cpp" />
     <ClCompile Include="SCBW\structures\CSprite.cpp" />
     <ClCompile Include="SCBW\structures\CUnit.cpp" />
@@ -521,6 +522,7 @@
     <ClInclude Include="SCBW\enumerations\UpgradeId.h" />
     <ClInclude Include="SCBW\enumerations\WeaponId.h" />
     <ClInclude Include="SCBW\scbwdata.h" />
+    <ClInclude Include="SCBW\SFileReader.h" />
     <ClInclude Include="SCBW\structures.h" />
     <ClInclude Include="SCBW\structures\CBullet.h" />
     <ClInclude Include="SCBW\structures\CImage.h" />
