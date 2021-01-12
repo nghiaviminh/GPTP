@@ -57,14 +57,14 @@ graphics::ColorId PLAYER::getFactionColor(u8 playerId) {
 
 }
 
-static u32 PLAYER::numberOfUnitsOfType(u8 playerId, u16 unitId) {
+u32 PLAYER::numberOfUnitsOfType(u8 playerId, u16 unitId) {
 	if (unitId > UNIT_TYPE_COUNT - 1) {
 		return 0;
 	}
 	return allUnitCount[unitId].player[playerId];
 }
 
-static u32 PLAYER::numberOfCompletedUnitsOfType(u8 playerId, u16 unitId) {
+u32 PLAYER::numberOfCompletedUnitsOfType(u8 playerId, u16 unitId) {
 	if (unitId > UNIT_TYPE_COUNT - 1) {
 		return 0;
 	}

@@ -376,11 +376,11 @@ struct CUnit: public CUnitLayout {
   /// Returns the maximum hangar space for the unit
   u8 getMaxHangarSpace();
 
-  /// Returns whether the unit is of type Reaver
-  bool unitIsReaver();
+  /// Returns whether the unit is of type Reaver (incl. hero Reaver)
+  bool isReaver();
 
-  /// Returns whether the unit is of type Carrier
-  bool unitIsCarrier();
+  /// Returns whether the unit is of type Carrier (incl. hero Carrier)
+  bool isCarrier();
 
   /// Returns whether the unit is currently constructing a Protoss building
   bool unitIsTrainingOrMorphing();

@@ -1170,7 +1170,7 @@ u8 CUnit::getMaxHangarSpace() {
 	}
 }
 
-bool CUnit::unitIsReaver() {
+bool CUnit::isReaver() {
 	assert(this);
 	const u32 Func_unitIsReaver = 0x00401490;
 	static s32 result;
@@ -1184,7 +1184,7 @@ bool CUnit::unitIsReaver() {
 	return (bool)result;
 }
 
-bool CUnit::unitIsCarrier() {
+bool CUnit::isCarrier() {
 	assert(this);
 	const u32 Func_unitIsCarrier = 0x00401470;
 	static s32 result;
