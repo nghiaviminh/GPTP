@@ -56,3 +56,17 @@ graphics::ColorId PLAYER::getFactionColor(u8 playerId) {
 	return return_value;
 
 }
+
+static u32 numberOfUnitsOfType(u8 playerId, u16 unitId) {
+	if (unitId > UNIT_TYPE_COUNT - 1) {
+		return 0;
+	}
+	return allUnitCount[unitId].player[playerId];
+}
+
+static u32 numberOfCompletedUnitsOfType(u8 playerId, u16 unitId) {
+	if (unitId > UNIT_TYPE_COUNT - 1) {
+		return 0;
+	}
+	return completedUnitCount[unitId].player[playerId];
+}

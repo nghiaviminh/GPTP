@@ -29,4 +29,7 @@ struct PLAYER {
   /// of the player identified by PlayerId
   static u8 getFactionColor(u8 playerId);
 
+  static u32 numberOfUnitsOfType(u8 playerId, u16 unitId);
+  static u32 numberOfCompletedUnitsOfType(u8 playerId, u16 unitId);
+
 };
