@@ -30,20 +30,20 @@ bool parseRequirementsFile(char* path, u16 requirementOverridesIndex[UNIT_TYPE_C
 	HANDLE fileHandle;
 	if (!SFileOpenFileEx(0, path, 0, &fileHandle))
 	{
-		DebugOut("File not found");
+		DebugOut("File not found: %s", path);
 		return false;
 	}
 	int fileSize = SFileGetFileSize(fileHandle, 0);
 	if (fileSize == -1 || !fileSize)
 	{
-		DebugOut("File not found");
+		DebugOut("File is empty: %s", path);
 		return false;
 	}
 	char* filePointer = (char*)SMemAlloc(fileSize, "logfilename", 0, 0);
 	int bytesRead;
 	if (!SFileReadFile(fileHandle, filePointer, fileSize, &bytesRead, 0) || bytesRead != fileSize)
 	{
-		DebugOut("Error %d", GetLastError());
+		DebugOut("File reading error %s (%d)", path, GetLastError());
 		return false;
 	}
 

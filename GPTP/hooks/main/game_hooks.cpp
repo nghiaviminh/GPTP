@@ -34,7 +34,7 @@ bool nextFrame() {
 }
 
 bool gameOn() {
-	customRequirements::parseUnitRequirementOverrides();
+	customRequirements::parseRequirementOverrides();
 	return true;
 }
 

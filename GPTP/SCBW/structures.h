@@ -16,6 +16,7 @@ const int UPGRADE_TYPE_COUNT	= 61;
 const int WEAPON_TYPE_COUNT		= 130;
 const int FLINGY_TYPE_COUNT		= 209;
 const int IMAGE_TYPE_COUNT		= 999;
+const int ORDER_TYPE_COUNT		= 190;
 
 #include "structures/CUnit.h"
 #include "structures/CBullet.h"
