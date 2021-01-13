@@ -122,11 +122,9 @@
 #include "hooks/interface/status_display/wireframe.h"
 #include "hooks/weapons/wpnspellhit.h"
 #include "hooks/orders/doodad_orders.h"
-#include "hooks/requirements/unit_requirements.h"
-#include "hooks/requirements/order_requirements.h"
-#include "hooks/requirements/upgrade_requirements.h"
-#include "hooks/requirements/tech_requirements.h"
-#include "hooks/requirements/research_requirements.h"
+
+// Custom requirements
+#include "hooks/requirements/requirements.h"
 
 /// This function is called when the plugin is loaded into StarCraft.
 /// You can enable/disable each group of hooks by commenting them.
