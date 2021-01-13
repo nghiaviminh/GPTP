@@ -1,5 +1,6 @@
 #include "tech_requirements.h"
 #include "SCBW/structures/Player.h"
+#include "hooks/requirements/requirements.h"
 #include <SCBW/api.h>
 #include <DebugUtils.h>
 
@@ -11,28 +12,19 @@ namespace {
 namespace hooks {
 	s32 parseRequirementOpcodes(CUnit* unit, u32 datReqOffset, u16 id, u32 player, u16* datReqBase) { //0x0046D610
 
-		/*
-		// Proof of concept override of datReqBase
-		if (datReqBase == requirements::upgrade) {
-			if (id == UpgradeId::ProtossGroundWeapons) {
-				u16 customDatReqBase[1000] = { 0 };
-				customDatReqBase[datReqOffset-1] = UpgradeId::ProtossGroundWeapons; // "Header" not included
-				customDatReqBase[datReqOffset] = RequirementOpcodes::CurrentUnitIs;
-				customDatReqBase[datReqOffset+1] = UnitId::ProtossForge;
-				customDatReqBase[datReqOffset+2] = RequirementOpcodes::IsNotTrainingOrMorphing;
-				customDatReqBase[datReqOffset+3] = RequirementOpcodes::UpgradeLv1Requires;
-				customDatReqBase[datReqOffset+4] = UnitId::ProtossZealot;
-				customDatReqBase[datReqOffset+5] = RequirementOpcodes::EndOfSublist;
-				customDatReqBase[datReqOffset+6] = RequirementOpcodes::UpgradeLv2Requires;
-				customDatReqBase[datReqOffset+7] = UnitId::ProtossDragoon;
-				customDatReqBase[datReqOffset+8] = RequirementOpcodes::EndOfSublist;
-				customDatReqBase[datReqOffset+10] = RequirementOpcodes::UpgradeLv3Requires;
-				customDatReqBase[datReqOffset+11] = UnitId::ProtossHighTemplar;
-				customDatReqBase[datReqOffset+12] = RequirementOpcodes::EndOfSublist;
-				datReqBase = customDatReqBase;
-			}
+		if (datReqBase == requirements::orders && customRequirements::getOrderRequirementOverrides()[id] != 0) {
+			datReqOffset = customRequirements::getOrderRequirementOverrides()[id];
+			datReqBase = customRequirements::getOrderRequirementOpcodes();
+		} else if (datReqBase == requirements::research && customRequirements::getResearchRequirementOverrides()[id] != 0) {
+			datReqOffset = customRequirements::getResearchRequirementOverrides()[id];
+			datReqBase = customRequirements::getResearchRequirementOpcodes();
+		} else if (datReqBase == requirements::tech && customRequirements::getTechRequirementOverrides()[id] != 0) {
+			datReqOffset = customRequirements::getTechRequirementOverrides()[id];
+			datReqBase = customRequirements::getTechRequirementOpcodes();
+		} else if (datReqBase == requirements::upgrade && customRequirements::getUpgradeRequirementOverrides()[id] != 0) {
+			datReqOffset = customRequirements::getUpgradeRequirementOverrides()[id];
+			datReqBase = customRequirements::getUpgradeRequirementOpcodes();
 		}
-		*/
 
 		s32 result = parseRequirementOpcodesLogic(unit, datReqOffset, id, player, datReqBase);
 		return result;
