@@ -315,8 +315,8 @@ namespace {
 
 			default:
 				// Any invalid opcodes will be read here as unit IDs
-				unitid = datReqBase[datReqOffset++];
-				success += PLAYER::numberOfCompletedUnitsOfType(playerId, unitid);
+				unitId = opcode;
+				success += PLAYER::numberOfCompletedUnitsOfType(playerId, unitId);
 			}
 
 			if (datReqBase[datReqOffset] == RequirementOpcodes::Or) { // Or
