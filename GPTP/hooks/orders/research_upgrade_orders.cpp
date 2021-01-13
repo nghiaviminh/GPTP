@@ -8,7 +8,7 @@ namespace {
 	bool isUnitUpgradeAvailable(CUnit* unit);															//033D0
 	void ApplySpeedUpgradeFromUpgradeType(CUnit* unit, u8 upgradeType);									//54540
 	void removeOrderFromUnitQueue(CUnit* unit, COrder* order);											//742D0
-	void playUpgradeCompleteSound();																	//8F070
+	void playUpgradeCompleteSound(CUnit* unit);															//48F070
 	void playResearchCompleteSound();																	//8F150
 	void setUpgradeLevel(u32 playerId, u32 upgradeType, u8 upgradeLevel);								//CE770
 	
@@ -48,7 +48,7 @@ namespace hooks {
 
 				u8 upgradeLevel;
 				
-				playUpgradeCompleteSound();
+				playUpgradeCompleteSound(unit);
 
 				if(unit->building.upgradeType >= UpgradeId::UnusedUpgrade46)
 					upgradeLevel = UpgradesBw->currentLevel[unit->playerId][unit->building.upgradeType - UpgradeId::UnusedUpgrade46];
@@ -342,10 +342,11 @@ namespace {
 	;
 
 	const u32 Func_playUpgradeCompleteSound = 0x0048F070;
-	void playUpgradeCompleteSound() {
+	void playUpgradeCompleteSound(CUnit* unit) {
 
 		__asm {
 			PUSHAD
+			MOV ESI, unit
 			CALL Func_playUpgradeCompleteSound
 			POPAD
 		}

@@ -274,7 +274,7 @@ SCBW_DATA(u16*, MineralCost,        techdataDat[0].address);	//00656248
 SCBW_DATA(u16*, GasCost,            techdataDat[1].address);	//006561F0
 SCBW_DATA(u16*, TimeCost,           techdataDat[2].address);	//006563D8
 SCBW_DATA(u16*, EnergyCost,         techdataDat[3].address);	//00656380
-//SCBW_DATA(u16*, ???,				techdataDat[4].address);	//00656198
+SCBW_DATA(u16*, Requirements,		techdataDat[4].address);	//00656198
 //SCBW_DATA(u16*, ???,				techdataDat[5].address);	//006562F8	//Restriction Flags according to EUDDB
 SCBW_DATA(u16*, IconId,				techdataDat[6].address);	//00656430	//"Icon, cmdicons.grp frame" according to EUDDB
 SCBW_DATA(u16*, Label,              techdataDat[7].address);	//006562A0
