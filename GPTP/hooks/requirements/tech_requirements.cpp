@@ -18,13 +18,6 @@ namespace hooks {
 
 namespace {
 	//parseRequirementOpcodes 0046D610 0000057A
-
-	// "techID" can also be an upgrade ID
-	// Return values seem to be:
-	//  1: Enabled
-	//  0: Blank
-	// -1: Grey
-
 	s32 parseRequirementOpcodesLogic(CUnit* unit, u32 datReqOffset, u16 id, u32 playerId, u16* datReqBase) {
 		// args:
 		// eax          u32    dat req offset
@@ -55,10 +48,10 @@ namespace {
 		}
 
 
-		while (datReqBase[datReqOffset] != 0xFFFF) {
+		while (datReqBase[datReqOffset] != RequirementOpcodes::EndOfSublist) {
 			opcode = datReqBase[datReqOffset++];
 			switch (opcode) {
-			case 0xFF24: // Must be Brood War
+			case RequirementOpcodes::MustBeBroodWar: // Must be Brood War
 				if (scbw::isBroodWarMode() == false) {
 					*lastInternalErr = 26;
 					return 0;
@@ -66,7 +59,7 @@ namespace {
 				success++;
 				break;
 
-			case 0xFF02: // Current Unit Is...
+			case RequirementOpcodes::CurrentUnitIs: // Current Unit Is...
 				unitid = datReqBase[datReqOffset++];
 				if (PLAYER::numberOfCompletedUnitsOfType(unitid, playerId) != 0) {
 					greyButton = false;
@@ -81,19 +74,19 @@ namespace {
 				success++;
 				break;
 
-			case 0xFF03: // Must have...
+			case RequirementOpcodes::MustHave:
 				unitid = datReqBase[datReqOffset++];
 				success += PLAYER::numberOfCompletedUnitsOfType(unitid, playerId) + PLAYER::numberOfUnitsOfType(unitid, playerId);
 				break;
 
-			case 0xFF18: // Is transport
+			case RequirementOpcodes::IsTransport:
 				if (unit->status & UnitStatus::IsHallucination) break;
 				if (unit->id == UnitId::overlord && UpgradesSc->currentLevel[unit->playerId][UpgradeId::VentralSacs] == 0) break;
 				if (units_dat::SpaceProvided[unit->id] == 0) break;
 				success++;
 				break;
 
-			case 0xFF0F: // Must be researched
+			case RequirementOpcodes::MustBeResearched:
 				if (id == TechId::Burrowing && unit->id == UnitId::lurker) {
 					success++;
 					break;
@@ -104,18 +97,18 @@ namespace {
 				success++;
 				break;
 
-			case 0xFF1C: // Is Hero and Enabled
+			case RequirementOpcodes::IsHeroAndEnabled:
 				if ((units_dat::BaseProperty[unit->id] & UnitProperty::Hero) == 0) break;
 				success++;
 				break;
 
-			case 0xFF07: // Is not training or morphing
+			case RequirementOpcodes::IsNotTrainingOrMorphing:
 				if (unit->unitIsTrainingOrMorphing() || unit->building.techType != TechId::None) { // unitIsTrainingOrMorphing 00401500 0000006A
 					*lastInternalErr = 5;
 					return 0;
 				}
 				// fall through
-			case 0xFF0A: // Is not upgrading
+			case RequirementOpcodes::IsNotUpgrading:
 				if (unit->building.upgradeType != UpgradeId::None) {
 					*lastInternalErr = 5;
 					return 0;
@@ -123,7 +116,7 @@ namespace {
 				success++;
 				break;
 
-			case 0xFF08: // Is not constructing add-on
+			case RequirementOpcodes::IsNotConstructingAddon:
 				if (unit->secondaryOrderId == OrderId::BuildAddon && (unit->status & UnitStatus::GroundedBuilding) != 0 && unit->currentBuildUnit != NULL && (unit->currentBuildUnit->status & UnitStatus::Completed) == 0) {
 					*lastInternalErr = 5;
 					return 0;
@@ -135,7 +128,7 @@ namespace {
 				success++;
 				break;
 
-			case 0xFF09: // Is not researching
+			case RequirementOpcodes::IsNotResearching:
 				if (unit->building.techType != TechId::None) {
 					*lastInternalErr = 5;
 					return 0;
@@ -143,7 +136,7 @@ namespace {
 				success++;
 				break;
 
-			case 0xFF05: // Is not lifted off
+			case RequirementOpcodes::IsNotLiftedOff: // Is not lifted off
 				if ((unit->status & UnitStatus::GroundedBuilding) == 0) {
 					*lastInternalErr = 7;
 					return 0;
@@ -151,7 +144,7 @@ namespace {
 				success++;
 				break;
 
-			case 0xFF06: // Is lifted off
+			case RequirementOpcodes::IsLiftedOff: // Is lifted off
 				if ((unit->status & UnitStatus::GroundedBuilding) != 0) {
 					*lastInternalErr = 6;
 					return 0;
@@ -159,7 +152,7 @@ namespace {
 				success++;
 				break;
 
-			case 0xFF0D: // Does not have exit
+			case RequirementOpcodes::DoesNotHaveExit: // Does not have exit
 				if (unit->building.nydusExit != NULL) {
 					// or unit->building.ghostNukeMissile
 					// or unit->building.nuke
@@ -172,7 +165,7 @@ namespace {
 				success++;
 				break;
 
-			case 0xFF11: // Is not burrowed
+			case RequirementOpcodes::IsNotBurrowed: // Is not burrowed
 				if ((unit->status & UnitStatus::Burrowed) != 0 && unit->pAI == NULL) {
 					*lastInternalErr = 5;
 					return 0;
@@ -180,7 +173,7 @@ namespace {
 				success++;
 				break;
 
-			case 0xFF26: // Is burrowed
+			case RequirementOpcodes::IsBurrowed: // Is burrowed
 				if ((unit->status & UnitStatus::Burrowed) == 0) {
 					*lastInternalErr = 5;
 					return 0;
@@ -188,7 +181,7 @@ namespace {
 				success++;
 				break;
 
-			case 0xFF12: // Can attack -- duplicate of "Is lifted off"???
+			case RequirementOpcodes::CanAttack: // Can attack -- duplicate of "Is lifted off"???
 				if ((unit->status & UnitStatus::GroundedBuilding) != 0) {
 					*lastInternalErr = 19;
 					return 0;
@@ -196,7 +189,7 @@ namespace {
 				success++;
 				break;
 
-			case 0xFF13: // Can set rally point -- duplicate of "Is lifted off"???
+			case RequirementOpcodes::CanSetRallyPoint: // Can set rally point -- duplicate of "Is lifted off"???
 				if ((unit->status & UnitStatus::GroundedBuilding) == 0) {
 					*lastInternalErr = 19;
 					return 0;
@@ -204,7 +197,7 @@ namespace {
 				success++;
 				break;
 
-			case 0xFF14: // Can move
+			case RequirementOpcodes::CanMove:
 				if ((unit->status & UnitStatus::GroundedBuilding) != 0) {
 					*lastInternalErr = 19;
 					return 0;
@@ -220,7 +213,7 @@ namespace {
 				success++;
 				break;
 
-			case 0xFF15: // Has weapon
+			case RequirementOpcodes::HasWeapon:
 				if (unit->hasWeapon() == false) {
 					*lastInternalErr = 19;
 					return 0;
@@ -228,7 +221,7 @@ namespace {
 				success++;
 				break;
 
-			case 0xFF1A: // Is subunit
+			case RequirementOpcodes::IsSubunit:
 				if ((units_dat::BaseProperty[unit->id] & UnitProperty::Subunit) == 0) {
 					*lastInternalErr = 19;
 					return 0;
@@ -236,7 +229,7 @@ namespace {
 				success++;
 				break;
 
-			case 0xFF17: // Is flying building
+			case RequirementOpcodes::IsFlyingBuilding:
 				if ((units_dat::BaseProperty[unit->id] & UnitProperty::FlyingBuilding) == 0) {
 					*lastInternalErr = 19;
 					return 0;
@@ -244,7 +237,7 @@ namespace {
 				success++;
 				break;
 
-			case 0xFF16: // Is worker
+			case RequirementOpcodes::IsWorker:
 				if ((units_dat::BaseProperty[unit->id] & UnitProperty::Worker) == 0) {
 					*lastInternalErr = 19;
 					return 0;
@@ -252,7 +245,7 @@ namespace {
 				success++;
 				break;
 
-			case 0xFF19: // Is powerup
+			case RequirementOpcodes::IsPowerup:
 				if ((units_dat::BaseProperty[unit->id] & UnitProperty::NeutralAccessories) == 0) {
 					*lastInternalErr = 19;
 					return 0;
@@ -260,7 +253,7 @@ namespace {
 				success++;
 				break;
 
-			case 0xFF1B: // Has spider mines
+			case RequirementOpcodes::HasMines:
 				if (unit->vulture.spiderMineCount == 0) {
 					*lastInternalErr = 8;
 					return 0;
@@ -268,29 +261,31 @@ namespace {
 				success++;
 				break;
 
-			case 0xFF1D: // Can hold position
-				if ((unit->id != UnitId::lurker || (unit->status & UnitStatus::Burrowed) == 0) && units_dat::RightClickAction[unit->id] == RightClickActions::NoCommand_AutoAttack && ((unit->status & UnitStatus::GroundedBuilding) == 0 || unit->isFactory() == false)) {
+			case RequirementOpcodes::CanHoldPosition:
+				if ((unit->id != UnitId::lurker || (unit->status & UnitStatus::Burrowed) == 0)
+					&& units_dat::RightClickAction[unit->id] == RightClickActions::NoCommand_AutoAttack
+					&& ((unit->status & UnitStatus::GroundedBuilding) == 0 || unit->isFactory() == false)) {
 					*lastInternalErr = 8;
 					return 0;
 				}
 				success++;
 				break;
 
-			case 0xFF1E: // Allow on hallucinations
+			case RequirementOpcodes::AllowOnHallucinations:
 				allowHalluc = true;
 				success++;
 				break;
 
-			case 0xFF1F: // Upgrade Lv-1 Require...
+			case RequirementOpcodes::UpgradeLv1Requires:
 				switch (scbw::getUpgradeLevel(playerId, id)) {
 				default:
-					findopcode = 0xFF1F; // Upgrade Lv-1 Require...
+					findopcode = RequirementOpcodes::UpgradeLv1Requires;
 					break;
 				case 2:
-					findopcode = 0xFF21; // Upgrade Lv-3 Require...
+					findopcode = RequirementOpcodes::UpgradeLv3Requires;
 					break;
 				case 1:
-					findopcode = 0xFF20; // Upgrade Lv-2 Require...
+					findopcode = RequirementOpcodes::UpgradeLv2Requires;
 				}
 				while (opcode != findopcode) {
 					opcode = datReqBase[datReqOffset++];
@@ -298,11 +293,11 @@ namespace {
 				success++;
 				break;
 
-			case 0xFF22: // Grey
+			case RequirementOpcodes::Grey:
 				*lastInternalErr = 21;
 				return -1;
 
-			case 0xFF23: // Blank
+			case RequirementOpcodes::Blank:
 				*lastInternalErr = 23;
 				return 0;
 
@@ -312,7 +307,7 @@ namespace {
 				success += PLAYER::numberOfCompletedUnitsOfType(playerId, unitid);
 			}
 
-			if (datReqBase[datReqOffset] == 0xFF01) { // Or
+			if (datReqBase[datReqOffset] == RequirementOpcodes::Or) { // Or
 				datReqOffset++;
 				continue; // continue loop without clearing success or applying failure
 			}

@@ -91,7 +91,7 @@ namespace {
 			return 0;
 		}
 
-		if (unitsDat[unitId] == UnitCreateRequirementOpcodes::EndOfSublist) {
+		if (unitsDat[unitId] == RequirementOpcodes::EndOfSublist) {
 			DebugOut("EndOfSublist (%d):", currentOpcode);
 			parseUnitsDatReqs();
 		}
@@ -109,7 +109,7 @@ namespace {
 		//ByteOperations::SetLowWord(v8, requirements::requirementsTable[v7]);
 
 		v28 = 0;
-		if (currentOpcode == UnitCreateRequirementOpcodes::EndOfSublist) {
+		if (currentOpcode == RequirementOpcodes::EndOfSublist) {
 			DebugOut(">Return Allowed");
 			return 1;
 		}
@@ -121,7 +121,7 @@ namespace {
 		{
 			//DebugOut("v8 = %d", currentOpcode);
 			switch (currentOpcode) {
-			case UnitCreateRequirementOpcodes::CurrentUnitIs:
+			case RequirementOpcodes::CurrentUnitIs:
 			{
 				u16 nextOpcodeUnitId = requirementsTable[opcodeIndex + 1];
 				DebugOut("CurrentUnitIs (%d) unitId = %d:", currentOpcode, nextOpcodeUnitId);
@@ -145,13 +145,13 @@ namespace {
 				DebugOut(">False");
 				goto LABEL_73_PERHAPS_FINAL_CHECK;
 			}
-			case UnitCreateRequirementOpcodes::MustHave:
+			case RequirementOpcodes::MustHave:
 				DebugOut("MustHave (%d):", currentOpcode);
 				v24 = requirementsTable[opcodeIndex++];
 				v25 = PLAYER::numberOfCompletedUnitsOfType(playerID, currentOpcode) + PLAYER::numberOfUnitsOfType(playerID, currentOpcode);
 				DebugOut(">Checking next opcode");
 				goto LABEL_71_SUM_VALUES;
-			case UnitCreateRequirementOpcodes::MustHaveAddon:
+			case RequirementOpcodes::MustHaveAddon:
 			{
 				DebugOut("MustHaveAddon (%d):", currentOpcode);
 				if (*CHEAT_STATE & CheatFlags::ModifyThePhaseVariance)
@@ -178,7 +178,7 @@ namespace {
 				DebugOut(">True");
 				goto LABEL_72_NEXT_OPCODE;
 			}
-			case UnitCreateRequirementOpcodes::IsNotLiftedOff:
+			case RequirementOpcodes::IsNotLiftedOff:
 				DebugOut("IsNotLiftedOff (%d):", currentOpcode);
 				if (!(parentUnit->status & UnitStatus::GroundedBuilding))
 				{
@@ -189,7 +189,7 @@ namespace {
 				v11 = v9 + 1;
 				DebugOut(">True");
 				goto LABEL_72_NEXT_OPCODE;
-			case UnitCreateRequirementOpcodes::IsNotTrainingOrMorphing:
+			case RequirementOpcodes::IsNotTrainingOrMorphing:
 				DebugOut("IsNotTrainingOrMorphing (%d):", currentOpcode);
 				if (parentUnit->unitIsTrainingOrMorphing() || parentUnit->building.upgradeType != TechId::None || parentUnit->building.techType != UpgradeId::None) {
 					DebugOut(">False");
@@ -198,7 +198,7 @@ namespace {
 				++v28;
 				DebugOut(">True");
 				goto LABEL_73_PERHAPS_FINAL_CHECK;
-			case UnitCreateRequirementOpcodes::IsNotConstructingAddon:
+			case RequirementOpcodes::IsNotConstructingAddon:
 				DebugOut("IsNotConstructingAddon (%d):", currentOpcode);
 				if (parentUnit->isConstructingAddon() || parentUnit->isAttemptingProtossBuild()) {
 					DebugOut(">False");
@@ -207,7 +207,7 @@ namespace {
 				v11 = v15 + 1;
 				DebugOut(">True");
 				goto LABEL_72_NEXT_OPCODE;
-			case UnitCreateRequirementOpcodes::IsNotResearching:
+			case RequirementOpcodes::IsNotResearching:
 				DebugOut("IsNotResearching (%d):", currentOpcode);
 				if (parentUnit->building.techType != TechId::None) {
 					DebugOut(">False");
@@ -216,7 +216,7 @@ namespace {
 				v11 = v9 + 1;
 				DebugOut(">True");
 				goto LABEL_72_NEXT_OPCODE;
-			case UnitCreateRequirementOpcodes::IsNotUpgrading:
+			case RequirementOpcodes::IsNotUpgrading:
 				DebugOut("IsNotUpgrading (%d):", currentOpcode);
 				if (parentUnit->building.upgradeType != UpgradeId::None) {
 					DebugOut(">False");
@@ -225,7 +225,7 @@ namespace {
 				v11 = v9 + 1;
 				DebugOut(">True");
 				goto LABEL_72_NEXT_OPCODE;
-			case UnitCreateRequirementOpcodes::IsNotConstructing:
+			case RequirementOpcodes::IsNotConstructing:
 				DebugOut("IsNotConstructing (%d):", currentOpcode);
 				if (parentUnit->id == UnitId::TerranSCV && parentUnit->mainOrderId == OrderId::ConstructingBuilding) {
 					DebugOut(">False");
@@ -234,7 +234,7 @@ namespace {
 				v11 = v9 + 1;
 				DebugOut(">True");
 				goto LABEL_72_NEXT_OPCODE;
-			case UnitCreateRequirementOpcodes::DoesNotHaveAddonAttached:
+			case RequirementOpcodes::DoesNotHaveAddonAttached:
 				DebugOut("DoesNotHaveAddonAttached (%d):", currentOpcode);
 				if (parentUnit->building.addon)
 				{
@@ -267,7 +267,7 @@ namespace {
 				//ByteOperations::SetLowWord(currentOpcode, requirementsTable[opcodeIndex]);
 				currentOpcode = requirementsTable[opcodeIndex];
 				v27 = 1;
-				if (currentOpcode != UnitCreateRequirementOpcodes::EndOfSublist)
+				if (currentOpcode != RequirementOpcodes::EndOfSublist)
 					goto LABEL_18_ENTER_MAIN_BODY;
 				if (v28)
 				{
@@ -277,7 +277,7 @@ namespace {
 				}
 				DebugOut(">Return Allowed");
 				return 1;
-			case UnitCreateRequirementOpcodes::HasHangarSpace:
+			case RequirementOpcodes::HasHangarSpace:
 				DebugOut("HasHangarSpace (%d):", currentOpcode);
 				v18 = -1;
 				//ByteOperations::SetLowWord(v19, unitIsCarrier(parentUnit));
@@ -302,7 +302,7 @@ namespace {
 				++v29;
 				DebugOut(">True");
 				goto LABEL_73_PERHAPS_FINAL_CHECK;
-			case UnitCreateRequirementOpcodes::DoesNotHaveArmedMissile:
+			case RequirementOpcodes::DoesNotHaveArmedMissile:
 				DebugOut("DoesNotHaveArmedMissile (%d):", currentOpcode);
 				if (parentUnit->building.silo.nuke) {
 					DebugOut(">False");
@@ -311,7 +311,7 @@ namespace {
 				v11 = v9 + 1;
 				DebugOut(">True");
 				goto LABEL_72_NEXT_OPCODE;
-			case UnitCreateRequirementOpcodes::IsNotBurrowed:
+			case RequirementOpcodes::IsNotBurrowed:
 				DebugOut("IsNotBurrowed (%d):", currentOpcode);
 				if (parentUnit->status & UnitStatus::Burrowed)
 				{
@@ -323,15 +323,15 @@ namespace {
 				v11 = v9 + 1;
 				DebugOut(">True");
 				goto LABEL_72_NEXT_OPCODE;
-			case UnitCreateRequirementOpcodes::Grey:
+			case RequirementOpcodes::Grey:
 				DebugOut("Grey (%d):", currentOpcode);
 				*lastInternalErr = InternalErrors::UnknownError21;
 				DebugOut(">Return Grey");
 				return -1;
-			case UnitCreateRequirementOpcodes::Blank:
+			case RequirementOpcodes::Blank:
 				DebugOut("Blank (%d):", currentOpcode);
 				goto LABEL_93_ERROR_23_RETURN_0;
-			case UnitCreateRequirementOpcodes::MustBeBroodWar:
+			case RequirementOpcodes::MustBeBroodWar:
 				DebugOut("MustBeBroodWar (%d):", currentOpcode);
 				if (!IS_BROOD_WAR)
 				{
@@ -342,7 +342,7 @@ namespace {
 				v11 = v9 + 1;
 				DebugOut(">True");
 				goto LABEL_72_NEXT_OPCODE;
-			case UnitCreateRequirementOpcodes::IsResearched:
+			case RequirementOpcodes::IsResearched:
 				DebugOut("IsResearched (%d):", currentOpcode);
 				v10 = requirementsTable[opcodeIndex++];
 				if (scbw::hasTechResearched(parentUnit->playerId, v10) && !(*CHEAT_STATE & CheatFlags::MedievalMan))
@@ -354,7 +354,7 @@ namespace {
 				++v29;
 				DebugOut(">True");
 				goto LABEL_73_PERHAPS_FINAL_CHECK;
-			case UnitCreateRequirementOpcodes::IsBurrowed:
+			case RequirementOpcodes::IsBurrowed:
 				DebugOut("IsBurrowed (%d):", currentOpcode);
 				if (!(parentUnit->status & UnitStatus::Burrowed))
 				{

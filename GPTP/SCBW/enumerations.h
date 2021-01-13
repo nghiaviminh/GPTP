@@ -471,8 +471,8 @@ namespace RightClickActions {
 };
 }
 
-// List of opcodes used to set whether a given unit/building/hangar unit can be produced by/morphed into
-namespace UnitCreateRequirementOpcodes {
+// List of opcodes used to set whether a given unit can use build or train a unit, technology, research technology, upgrade or perform an order
+namespace RequirementOpcodes {
 	enum Enum {
 		None = 0x0FF00,
 		Or = 0x0FF01,
