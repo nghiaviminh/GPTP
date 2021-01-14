@@ -107,11 +107,11 @@ namespace customRequirements {
 		static bool initialized = false;
 		if (!initialized) {
 			initialized = true;
-			parseRequirementsFile("rez\\orders.datreq", customRequirements::getOrderRequirementOverrides(), customRequirements::getOrderRequirementOpcodes());
-			parseRequirementsFile("rez\\research.datreq", customRequirements::getResearchRequirementOverrides(), customRequirements::getResearchRequirementOpcodes());
-			parseRequirementsFile("rez\\tech.datreq", customRequirements::getTechRequirementOverrides(), customRequirements::getTechRequirementOpcodes());
-			parseRequirementsFile("rez\\units.datreq", customRequirements::getUnitRequirementOverrides(), customRequirements::getUnitRequirementOpcodes());
-			parseRequirementsFile("rez\\upgrades.datreq", customRequirements::getUpgradeRequirementOverrides(), customRequirements::getUpgradeRequirementOpcodes());
+			parseRequirementsFile("datreq\\orders.txt", customRequirements::getOrderRequirementOverrides(), customRequirements::getOrderRequirementOpcodes());
+			parseRequirementsFile("datreq\\research.txt", customRequirements::getResearchRequirementOverrides(), customRequirements::getResearchRequirementOpcodes());
+			parseRequirementsFile("datreq\\tech.txt", customRequirements::getTechRequirementOverrides(), customRequirements::getTechRequirementOpcodes());
+			parseRequirementsFile("datreq\\units.txt", customRequirements::getUnitRequirementOverrides(), customRequirements::getUnitRequirementOpcodes());
+			parseRequirementsFile("datreq\\upgrades.txt", customRequirements::getUpgradeRequirementOverrides(), customRequirements::getUpgradeRequirementOpcodes());
 		}
 	}
 }
