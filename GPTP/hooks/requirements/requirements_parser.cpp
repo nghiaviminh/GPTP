@@ -1,5 +1,57 @@
 #include "requirements_parser.h"
 #include <SCBW/SFileReader.h>
+#include <DebugUtils.h>
+
+
+namespace {
+	bool parseRequirementsFile(char* path, u16 requirementOverridesIndex[UNIT_TYPE_COUNT], u16 requirementOpcodes[UNIT_TYPE_COUNT * 10]) {
+		HANDLE fileHandle;
+		if (!SFileOpenFileEx(0, path, 0, &fileHandle))
+		{
+			DebugOut("File not found: %s", path);
+			return false;
+		}
+		int fileSize = SFileGetFileSize(fileHandle, 0);
+		if (fileSize == -1 || !fileSize)
+		{
+			DebugOut("File is empty: %s", path);
+			return false;
+		}
+		char* filePointer = (char*)SMemAlloc(fileSize, "logfilename", 0, 0);
+		int bytesRead;
+		if (!SFileReadFile(fileHandle, filePointer, fileSize, &bytesRead, 0) || bytesRead != fileSize)
+		{
+			DebugOut("File reading error %s (%d)", path, GetLastError());
+			return false;
+		}
+
+		char* delimiter = "\r\n";
+		int line = 1;  // To ensure no indexes point to line 0 which is undefined
+		int opcodeSetCount = 0;
+		int requirementSet = 0;
+		//u16 requirementOverridesIndex[UNIT_TYPE_COUNT] = { 0 };
+		//u16 requirementOpcodes[UNIT_TYPE_COUNT * 10] = { 0 };
+		char* token = strtok(filePointer, delimiter);
+		while (token != NULL) {
+			// If line ends with ":", treat it as an opcode header and add the 
+			// id to the requirementOverridesIndex lookup table.
+			u16 value = atoi(token);
+			if (strchr(token, ':') != NULL) {
+				requirementOverridesIndex[value] = line + 1; //Because otherwise it gets stuck on having the unit
+			}
+			if (value != 0) {
+				requirementOpcodes[line] = value;
+			}
+			line++;
+			token = strtok(NULL, delimiter);
+		}
+
+		BOOL result = SFileCloseFile(fileHandle);
+		// read filePointer
+		// finally SMemFree when done with the buffer
+		return result;
+	}
+}
 
 namespace customRequirements {
 	const int ENTRY_OPCODE_LIMIT = 32;
