@@ -2,7 +2,7 @@
 #include <SCBW/SFileReader.h>
 
 namespace customRequirements {
-	const int ENTRY_OPCODE_LIMIT = 16;
+	const int ENTRY_OPCODE_LIMIT = 32;
 
 	u16* getOrderRequirementOverrides() {
 		static u16 orderRequirementOverridesIndex[ORDER_TYPE_COUNT] = { 0 };
