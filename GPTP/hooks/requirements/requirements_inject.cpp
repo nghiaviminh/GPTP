@@ -1,6 +1,5 @@
-#include "tech_requirements.h"
+#include "requirements.h"
 #include <hook_tools.h>
-#include <DebugUtils.h>
 
 namespace {
 	void __declspec(naked) getParseRequirementOpcodesWrapper() //0x0046D610
@@ -26,18 +25,37 @@ namespace {
 			pushad
 		}
 		result = hooks::parseRequirementOpcodes(unit, datReqOffset, techID, playerId, datReqBase);
-
-		if (datReqBase == requirements::upgrade) {
-			//DebugOut("parseRequirementOpcodes upgrades returned %d for: id %d, unit %d, playerID %d (datReqOffset=%d, datReqBase=%p)\n\n\n", result, techID, unit->id, playerId, datReqOffset, datReqBase);
-		}
-		else {
-			//DebugOut("parseRequirementOpcodes returned %d for: techID %d, unit %d, playerID %d (datReqOffset=%d, datReqBase=%p)\n\n\n", result, techID, unit->id, playerId, datReqOffset, datReqBase);
-		}
 		__asm {
 			popad
 			mov eax, result
 			pop ebp
 			retn 12
+		}
+	}
+	void __declspec(naked) getUnitCreateAllowedWrapper() //0x0046E1C0
+	{
+		static s32 result;
+		static s16 unitId;
+		static CUnit* unit;
+		static s32 playerId;
+		__asm {
+			PUSH EBP
+			MOV EBP, ESP
+			PUSH EAX
+			MOV EAX, [EBP + 0x08]
+			MOV playerId, EAX
+			POP EAX
+			MOV unitId, AX
+			MOV unit, ESI
+			PUSHAD
+		}
+		result = hooks::UnitCreateAllowed(unitId, unit, playerId);
+		__asm {
+			POPAD
+			MOV EAX, result
+			MOV ESP, EBP
+			POP EBP
+			RETN 4
 		}
 	}
 }
@@ -49,5 +67,8 @@ namespace hooks {
 	}
 	void injectParseRequirementOpcodesWrapper() {
 		jmpPatch(getParseRequirementOpcodesWrapper, 0x0046D610, 0);
+	}
+	void injectUnitCreateAllowedWrapper() {
+		jmpPatch(getUnitCreateAllowedWrapper, 0x0046E1C0, 0);
 	}
 }

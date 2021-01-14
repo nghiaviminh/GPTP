@@ -5,7 +5,7 @@
 #include <SCBW/api.h>
 #include "../psi_field.h"
 #include <cstdio>
-#include "hooks/requirements/requirements.h"
+#include "hooks/requirements/requirements_parser.h"
 
 
 namespace hooks {

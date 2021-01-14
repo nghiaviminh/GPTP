@@ -1,26 +1,12 @@
+#pragma once
 #include <SCBW/api.h>
-#include "hooks/requirements/unit_requirements.h"
-#include "hooks/requirements/order_requirements.h"
-#include "hooks/requirements/upgrade_requirements.h"
-#include "hooks/requirements/tech_requirements.h"
-#include "hooks/requirements/research_requirements.h"
 
-namespace customRequirements {
+namespace hooks {
 
-	u16* getOrderRequirementOverrides();
-	u16* getOrderRequirementOpcodes();
+	s32 parseRequirementOpcodes(CUnit* unit, u32 datReqOffset, u16 id, u32 player, u16* datReqBase); //0x0046D610
+	s8 UnitCreateAllowed(u16 unitId, CUnit* unit, int playerID);//0046E1C0	
 
-	u16* getResearchRequirementOverrides();
-	u16* getResearchRequirementOpcodes();
+	void injectParseRequirementOpcodesWrapper();
+	void injectUnitCreateAllowedWrapper();
 
-	u16* getTechRequirementOverrides();
-	u16* getTechRequirementOpcodes();
-
-	u16* getUnitRequirementOverrides();
-	u16* getUnitRequirementOpcodes();
-
-	u16* getUpgradeRequirementOverrides();
-	u16* getUpgradeRequirementOpcodes();
-
-	void parseRequirementOverrides();
 }
