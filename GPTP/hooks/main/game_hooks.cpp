@@ -6,6 +6,7 @@
 #include "../psi_field.h"
 #include <cstdio>
 #include "hooks/requirements/requirements_parser.h"
+#include "hooks/interface/buttonsets_parser.h"
 
 
 namespace hooks {
@@ -35,6 +36,7 @@ bool nextFrame() {
 
 bool gameOn() {
 	customRequirements::parseRequirementOverrides();
+	customButtonSets::parseButtonSetOverrides();
 	return true;
 }
 

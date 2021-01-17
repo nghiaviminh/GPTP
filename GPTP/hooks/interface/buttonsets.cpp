@@ -1,4 +1,5 @@
 #include "buttonsets.h"
+#include "buttonsets_parser.h"
 
 //Helper functions
 
@@ -210,7 +211,7 @@ BUTTON_SET* getCustomButtonSet(BUTTON_SET* base_buttonset, int unitID) {
 		customButtonsArray[i].actFunc = buttonSetTable[unitID].firstButton[i].actFunc;
 		customButtonsArray[i].actStringID = buttonSetTable[unitID].firstButton[i].actStringID;
 		customButtonsArray[i].actVar = buttonSetTable[unitID].firstButton[i].actVar;
-		customButtonsArray[i].iconID = 387;//buttonSetTable[unitID].firstButton[i].iconID;
+		customButtonsArray[i].iconID = buttonSetTable[unitID].firstButton[i].iconID;
 		customButtonsArray[i].position = buttonSetTable[unitID].firstButton[i].position;
 		customButtonsArray[i].reqFunc = buttonSetTable[unitID].firstButton[i].reqFunc;
 		customButtonsArray[i].reqStringID = buttonSetTable[unitID].firstButton[i].reqStringID;
@@ -471,11 +472,15 @@ namespace hooks {
 	//a more customized way.
 	//Note: if you use updateButtonSet_Sub4591D0,
 	//you can disable the injection of this
-	//function in the _inject.cpp file.
+	//function in the _inject.cpp file. 
 	BUTTON_SET* getButtonSet(int index) {
-		return &(buttonSetTable[index]);
 		//if using custom button set, call it with return getCustomButtonSet(&buttonSetTable[index]);
 		//return getCustomButtonSet(&buttonSetTable[index], index);
+		//BUTTON_SET customButtonSet = customButtonSets::getButtonSetOverrides()[index];
+		//if (index == 41) {
+		//	return &customButtonSet;
+		//}		
+		return &(buttonSetTable[index]);
 	}
 
 	; //4599A0  
@@ -710,6 +715,17 @@ void updateButtonSet_Sub4591D0() {
 
 	current_dialog = *BUTTONSET_DIALOG;
 	current_button = current_buttonset->firstButton;
+	BUTTON *actual_current_button;
+	/*
+	NOTE: This needs a significant rework.
+	For now it simply overrides the current_button (firstButton) variable if it can detect that there's an override
+	for the given button set.
+	*/
+	if (customButtonSets::getOverriddenButtons()[*BUTTONSET_PORTRAIT_BUTTONSETID]) {
+		int i = customButtonSets::getOverriddenButtonStartIndex()[*BUTTONSET_PORTRAIT_BUTTONSETID];
+		actual_current_button = &customButtonSets::getButtons()[i];
+		current_button = actual_current_button;
+	}
 	current_button_state = BUTTON_STATE::Invisible;
 
 	if(current_dialog->controlType != DialogControlTypes::DialogBox)

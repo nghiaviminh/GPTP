@@ -47,8 +47,7 @@ namespace {
 		}
 
 		BOOL result = SFileCloseFile(fileHandle);
-		// read filePointer
-		// finally SMemFree when done with the buffer
+		SMemFree(filePointer, "", 0, 0);
 		return result;
 	}
 }
