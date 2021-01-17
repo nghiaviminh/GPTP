@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -14,18 +14,19 @@
     <ProjectGuid>{BAE0A287-3166-4C79-9F90-0C6A6DDB5A69}</ProjectGuid>
     <RootNamespace>GPTP</RootNamespace>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>
+    </WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -134,6 +135,20 @@
     <ClCompile Include="hooks\cloak_tech_inject.cpp" />
     <ClCompile Include="hooks\create_init_units.cpp" />
     <ClCompile Include="hooks\create_init_units_inject.cpp" />
+    <ClCompile Include="DatExtend\datext.cpp" />
+    <ClCompile Include="hooks\DatExtend\dat_load.cpp" />
+    <ClCompile Include="hooks\DatExtend\dat_load_inject.cpp" />
+    <ClCompile Include="DatExtend\flingy_dat.cpp" />
+    <ClCompile Include="DatExtend\images_dat.cpp" />
+    <ClCompile Include="DatExtend\mapdata_dat.cpp" />
+    <ClCompile Include="DatExtend\orders_dat.cpp" />
+    <ClCompile Include="DatExtend\portdata_dat.cpp" />
+    <ClCompile Include="DatExtend\sfxdata_dat.cpp" />
+    <ClCompile Include="DatExtend\sprites_dat.cpp" />
+    <ClCompile Include="DatExtend\techdata_dat.cpp" />
+    <ClCompile Include="DatExtend\units_dat.cpp" />
+    <ClCompile Include="DatExtend\upgrades_dat.cpp" />
+    <ClCompile Include="DatExtend\weapons_dat.cpp" />
     <ClCompile Include="hooks\detector.cpp" />
     <ClCompile Include="hooks\detector_inject.cpp" />
     <ClCompile Include="hooks\give_unit.cpp" />
@@ -363,6 +378,7 @@
     <ClCompile Include="plugin_main.cpp" />
     <ClCompile Include="SCBW\api.cpp" />
     <ClCompile Include="SCBW\SFileReader.cpp" />
+    <ClCompile Include="SCBW\scbwdata.cpp" />
     <ClCompile Include="SCBW\structures\CImage.cpp" />
     <ClCompile Include="SCBW\structures\CSprite.cpp" />
     <ClCompile Include="SCBW\structures\CUnit.cpp" />
@@ -387,6 +403,8 @@
     <ClInclude Include="hooks\cloak_nearby_units.h" />
     <ClInclude Include="hooks\cloak_tech.h" />
     <ClInclude Include="hooks\create_init_units.h" />
+    <ClInclude Include="DatExtend\datext.h" />
+    <ClInclude Include="hooks\DatExtend\dat_load.h" />
     <ClInclude Include="hooks\detector.h" />
     <ClInclude Include="hooks\give_unit.h" />
     <ClInclude Include="hooks\harvest.h" />
