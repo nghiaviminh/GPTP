@@ -288,7 +288,7 @@ SCBW_DATA_REF(u16*, MineralCost,        techdataDat[0].address);	//00656248
 SCBW_DATA_REF(u16*, GasCost,            techdataDat[1].address);	//006561F0
 SCBW_DATA_REF(u16*, TimeCost,           techdataDat[2].address);	//006563D8
 SCBW_DATA_REF(u16*, EnergyCost,         techdataDat[3].address);	//00656380
-SCBW_DATA(u16*, Requirements,   techdataDat[4].address);  //00656198
+SCBW_DATA_REF(u16*, Requirements,   techdataDat[4].address);  //00656198
 //SCBW_DATA_REF(u16*, ???,				techdataDat[5].address);	//006562F8	//Restriction Flags according to EUDDB
 SCBW_DATA_REF(u16*, IconId,				techdataDat[6].address);	//00656430	//"Icon, cmdicons.grp frame" according to EUDDB
 SCBW_DATA_REF(u16*, Label,              techdataDat[7].address);	//006562A0
@@ -445,11 +445,8 @@ SCBW_DATA(CUnit**,  activePortraitUnit,   0x00597248);
 SCBW_DATA_REF(AI_Main*,       AIScriptController,   0x0068FEE8); // @TODO
 SCBW_DATA(AiCaptain* const*, AiRegionCaptains,  0x0069A604);
 SCBW_DATA(u32*,           aiSupplyReserved,     0x006CA4BC);
-<<<<<<< HEAD
 SCBW_DATA(u32*,           lastInternalErr,      0x0066FF60);
-=======
 SCBW_DATA_REF(u32*, aiStrength, 0x006BB210); // aiStrength[2][UNIT_TYPE_COUNT] ???
->>>>>>> saintofidiocy/DatExtender
 
 //-------- Internal constants --------//
 

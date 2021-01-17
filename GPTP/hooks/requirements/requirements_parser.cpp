@@ -4,7 +4,11 @@
 
 
 namespace {
-	bool parseRequirementsFile(char* path, u16 requirementOverridesIndex[UNIT_TYPE_COUNT], u16 requirementOpcodes[UNIT_TYPE_COUNT * 10]) {
+	// TODO Replace these later
+	const int TMP_CONST_COUNT_ARG = 512;
+	const int ENTRY_OPCODE_LIMIT_ARG = 32;
+
+	bool parseRequirementsFile(char* path, u16 requirementOverridesIndex[TMP_CONST_COUNT_ARG], u16 requirementOpcodes[TMP_CONST_COUNT_ARG * ENTRY_OPCODE_LIMIT_ARG]) {
 		HANDLE fileHandle;
 		if (!SFileOpenFileEx(0, path, 0, &fileHandle))
 		{
@@ -53,52 +57,54 @@ namespace {
 }
 
 namespace customRequirements {
+	// TODO Make not constant later
+	const int TMP_CONST_COUNT = 512;
 	const int ENTRY_OPCODE_LIMIT = 32;
 
 	u16* getOrderRequirementOverrides() {
-		static u16 orderRequirementOverridesIndex[ORDER_TYPE_COUNT] = { 0 };
+		static u16 orderRequirementOverridesIndex[TMP_CONST_COUNT] = { 0 };
 		return orderRequirementOverridesIndex;
 	}
 	u16* getOrderRequirementOpcodes() {
-		static u16 orderRequirementOpcodes[ORDER_TYPE_COUNT * ENTRY_OPCODE_LIMIT] = { 0 };
+		static u16 orderRequirementOpcodes[TMP_CONST_COUNT * ENTRY_OPCODE_LIMIT] = { 0 };
 		return orderRequirementOpcodes;
 	}
 
 	u16* getResearchRequirementOverrides() {
-		static u16 researchRequirementOverridesIndex[TECH_TYPE_COUNT] = { 0 };
+		static u16 researchRequirementOverridesIndex[TMP_CONST_COUNT] = { 0 };
 		return researchRequirementOverridesIndex;
 	}
 	u16* getResearchRequirementOpcodes() {
-		static u16 researchRequirementOpcodes[TECH_TYPE_COUNT * ENTRY_OPCODE_LIMIT] = { 0 };
+		static u16 researchRequirementOpcodes[TMP_CONST_COUNT * ENTRY_OPCODE_LIMIT] = { 0 };
 		return researchRequirementOpcodes;
 	}
 
 	u16* getTechRequirementOverrides() {
-		static u16 techRequirementOverridesIndex[TECH_TYPE_COUNT] = { 0 };
+		static u16 techRequirementOverridesIndex[TMP_CONST_COUNT] = { 0 };
 		return techRequirementOverridesIndex;
 	}
 	u16* getTechRequirementOpcodes() {
-		static u16 techRequirementOpcodes[TECH_TYPE_COUNT * ENTRY_OPCODE_LIMIT] = { 0 };
+		static u16 techRequirementOpcodes[TMP_CONST_COUNT * ENTRY_OPCODE_LIMIT] = { 0 };
 		return techRequirementOpcodes;
 	}
 
 	u16* getUnitRequirementOverrides()
 	{
-		static u16 unitRequirementOverridesIndex[UNIT_TYPE_COUNT] = { 0 };
+		static u16 unitRequirementOverridesIndex[TMP_CONST_COUNT] = { 0 };
 		return unitRequirementOverridesIndex;
 	}
 	u16* getUnitRequirementOpcodes()
 	{
-		static u16 unitRequirementOpcodes[UNIT_TYPE_COUNT * ENTRY_OPCODE_LIMIT] = { 0 };
+		static u16 unitRequirementOpcodes[TMP_CONST_COUNT * ENTRY_OPCODE_LIMIT] = { 0 };
 		return unitRequirementOpcodes;
 	}
 
 	u16* getUpgradeRequirementOverrides() {
-		static u16 upgradeRequirementOverridesIndex[UPGRADE_TYPE_COUNT] = { 0 };
+		static u16 upgradeRequirementOverridesIndex[TMP_CONST_COUNT] = { 0 };
 		return upgradeRequirementOverridesIndex;
 	}
 	u16* getUpgradeRequirementOpcodes() {
-		static u16 upgradeRequirementOpcodes[UPGRADE_TYPE_COUNT * ENTRY_OPCODE_LIMIT] = { 0 };
+		static u16 upgradeRequirementOpcodes[TMP_CONST_COUNT * ENTRY_OPCODE_LIMIT] = { 0 };
 		return upgradeRequirementOpcodes;
 	}
 

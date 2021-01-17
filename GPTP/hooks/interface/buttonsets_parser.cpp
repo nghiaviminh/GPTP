@@ -100,7 +100,7 @@ namespace {
 }
 
 namespace customButtonSets {
-	const int BUTTON_SET_LENGTH = UNIT_TYPE_COUNT * 2;
+	const int BUTTON_SET_LENGTH = 999; // Temp for now
 	const int BUTTON_COUNT = BUTTON_SET_LENGTH * 24;
 
 	BUTTON_SET* getButtonSetOverrides() {
