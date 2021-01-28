@@ -88,7 +88,8 @@ SCBW_DATA(const char*,	  StringEmpty,			0x00501B7D);
 
 /// Units that are selected by the current player (or the player viewing the replay).
 struct UnitsSel { CUnit* unit[SELECTION_ARRAY_LENGTH]; };
-SCBW_DATA(UnitsSel*, clientSelectionGroup, 0x00597208);
+extern CUnit** localSelectionGroup;
+SCBW_DATA(UnitsSel*, clientSelectionGroup, 0x00597208); 
 SCBW_DATA(CUnit**, clientSelectionGroupEnd, 0x00597238);
 SCBW_DATA(u8*,    clientSelectionCount,   0x0059723D);
 

@@ -53,6 +53,11 @@ void memoryPatch(const u32 address, const T& data) {
   memoryPatch(address, (u8*)&data, sizeof(T));
 }
 
+template <typename T>
+void memoryPatch_Byte(const u32 address, const T& data) {
+	memoryPatch(address, (u8*)&data, 1);
+}
+
 /// Inject an array of bytes, using the given size.
 void memoryPatch(void* const address, const u8* data, const size_t size);
 inline void memoryPatch(const u32 address, const u8* data, const size_t size) {
