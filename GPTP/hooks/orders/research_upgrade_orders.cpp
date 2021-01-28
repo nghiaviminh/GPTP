@@ -5,12 +5,12 @@
 
 namespace {
 
-	bool isUnitUpgradeAvailable(CUnit* unit);								//033D0
-	void ApplySpeedUpgradeFromUpgradeType(CUnit* unit, u8 upgradeType);		//54540
-	void removeOrderFromUnitQueue(CUnit* unit, COrder* order);				//742D0
-	void playUpgradeCompleteSound(CUnit* unit);								//8F070
-	void playResearchCompleteSound(CUnit* unit);							//8F150
-	void setUpgradeLevel(u32 playerId, u32 upgradeType, u8 upgradeLevel);	//CE770
+	bool isUnitUpgradeAvailable(CUnit* unit);															//033D0
+	void ApplySpeedUpgradeFromUpgradeType(CUnit* unit, u8 upgradeType);									//54540
+	void removeOrderFromUnitQueue(CUnit* unit, COrder* order);											//742D0
+	void playUpgradeCompleteSound(CUnit* unit);															//48F070
+	void playResearchCompleteSound(CUnit* unit);																	//8F150
+	void setUpgradeLevel(u32 playerId, u32 upgradeType, u8 upgradeLevel);								//CE770
 	
 } //unnamed namespace
 

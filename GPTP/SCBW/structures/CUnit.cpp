@@ -1127,3 +1127,112 @@ void CUnit::updateSpeed() {
 		POPAD
 	}
 }
+
+bool CUnit::isAttemptingProtossBuild() {
+	assert(this);
+	return this->mainOrderId == OrderId::BuildProtoss1
+		&& this->status & UnitStatus::GroundedBuilding
+		&& this->orderTarget.unit != NULL
+		&& !(this->orderTarget.unit->status & UnitStatus::Completed);
+}
+
+bool CUnit::isConstructingAddon() {
+	assert(this);
+	return this->secondaryOrderId == OrderId::BuildAddon
+		&& this->status & UnitStatus::GroundedBuilding
+		&& this->currentBuildUnit != NULL
+		&& !(this->currentBuildUnit->status & UnitStatus::Completed);
+}
+
+u8 CUnit::getHangarTrainCount() {
+	assert(this);
+	const u32 Func_getHangarTrainCount = 0x00465270;
+	static u8 result = 0;
+	__asm {
+		PUSHAD
+		MOV EDX, this
+		CALL Func_getHangarTrainCount
+		MOV result, AL
+		POPAD
+	}
+}
+
+u8 CUnit::getMaxHangarSpace() {
+	assert(this);
+	const u32 Func_getMaxHangarSpace = 0x004653D0;
+	static u8 result = 0;
+	__asm {
+		PUSHAD
+		MOV EDX, this
+		CALL Func_getMaxHangarSpace
+		MOV result, AL
+		POPAD
+	}
+}
+
+bool CUnit::isReaver() {
+	assert(this);
+	const u32 Func_unitIsReaver = 0x00401490;
+	static s32 result;
+	__asm {
+		PUSHAD
+		MOV EAX, this
+		CALL Func_unitIsReaver
+		MOV result, EAX
+		POPAD
+	}
+	return (bool)result;
+}
+
+bool CUnit::isCarrier() {
+	assert(this);
+	const u32 Func_unitIsCarrier = 0x00401470;
+	static s32 result;
+	__asm {
+		PUSHAD
+		MOV EAX, this
+		CALL Func_unitIsCarrier
+		MOV result, EAX
+		POPAD
+	}
+	return (bool)result;
+}
+
+bool CUnit::unitIsTrainingOrMorphing() {
+	assert(this);
+	const u32 Func_unitIsTrainingOrMorphing = 0x00401500;
+	static u32 result;
+	__asm {
+		PUSHAD
+		MOV ECX, this
+		CALL Func_unitIsTrainingOrMorphing
+		MOV result, EAX
+		POPAD
+	}
+	return (bool)result;
+}
+
+bool CUnit::isQueueSlotActive(int slot) {
+	assert(this);
+	return this->buildQueue[(slot + (unsigned __int8)this->buildQueueSlot) % 5] <= (unsigned __int16)UnitId::Spell_DisruptionWeb;
+}
+
+u8 CUnit::getRightClickActionOrder() {
+	u8 result;
+	if (this->id == UnitId::ZergLurker && this->status & UnitStatus::Burrowed)
+		result = RightClickActions::NoMove_NormalAttack;
+	else {
+		u8 temp_result = units_dat::RightClickAction[this->id];
+
+		if (
+			temp_result == RightClickActions::NoCommand_AutoAttack &&
+			this->status & UnitStatus::GroundedBuilding &&
+			this->isFactory()
+			)
+			result = RightClickActions::NormalMove_NoAttack;
+		else
+			result = temp_result;
+
+	}
+	return result;
+}

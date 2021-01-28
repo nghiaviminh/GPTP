@@ -1,4 +1,5 @@
 #include "buttonsets.h"
+#include "buttonsets_parser.h"
 
 //Helper functions
 
@@ -168,7 +169,7 @@ enum Enum : u32 {
 //This make a copy of the Marine buttonset.
 //Note that the function would have to be duplicated
 //for each buttonset to create
-BUTTON_SET* getCustomButtonSet(BUTTON_SET* base_buttonset) {
+BUTTON_SET* getCustomButtonSet(BUTTON_SET* base_buttonset, int unitID) {
 
 	//Use static variables to avoid memory allocation trouble
 	static BUTTON_SET customButtonSet;
@@ -176,7 +177,7 @@ BUTTON_SET* getCustomButtonSet(BUTTON_SET* base_buttonset) {
 
 	//since it's a copy of the marine set, it would have the same amount of buttons
 	//this need to be modded according to what you expected selected due to hardcoded marine in example
-	customButtonSet.buttonsInSet = buttonSetTable[UnitId::TerranMarine].buttonsInSet;
+	customButtonSet.buttonsInSet = buttonSetTable[unitID].buttonsInSet;
 	//customButtonSet.buttonsInSet = base_buttonset->buttonsInSet; //to use buttonset passed
 
 	//connectedUnit should usually be init at 0xFFFF.Almost unused (maybe not fully implemented).
@@ -185,20 +186,36 @@ BUTTON_SET* getCustomButtonSet(BUTTON_SET* base_buttonset) {
 	//this should always be like this since the array is static
 	customButtonSet.firstButton = &customButtonsArray[0];
 
+	if (unitID == 0) {
+
+		customButtonSet.buttonsInSet = 1;
+
+		customButtonsArray[0].actFunc = (ACT_FUNC*)ButtonActions::Stop;
+		customButtonsArray[0].actStringID = 665;
+		customButtonsArray[0].actVar = 0;
+		customButtonsArray[0].iconID = IconId::Psionic_Storm;
+		customButtonsArray[0].position = 1;
+		customButtonsArray[0].reqFunc = (REQ_FUNC*)ButtonRequirements::Always;
+		customButtonsArray[0].reqStringID = 665;
+		customButtonsArray[0].reqVar = 0;
+
+		return &customButtonSet;
+	}
+
 	//For each button in the array until reaching the amount of buttonsInSet, copy the data for
 	//each member of the button structure from the unmodded set to the custom set.
 	//this need to be modded according to what you expected selected due to hardcoded marine in example
 	for(u32 i = 0; i < customButtonSet.buttonsInSet; i++) {
 		//note: for each line, could also be:
 		//customButtonsArray[i].something = base_buttonset->firstButton[i].something;
-		customButtonsArray[i].actFunc = buttonSetTable[UnitId::TerranMarine].firstButton[i].actFunc;
-		customButtonsArray[i].actStringID = buttonSetTable[UnitId::TerranMarine].firstButton[i].actStringID;
-		customButtonsArray[i].actVar = buttonSetTable[UnitId::TerranMarine].firstButton[i].actVar;
-		customButtonsArray[i].iconID = buttonSetTable[UnitId::TerranMarine].firstButton[i].iconID;
-		customButtonsArray[i].position = buttonSetTable[UnitId::TerranMarine].firstButton[i].position;
-		customButtonsArray[i].reqFunc = buttonSetTable[UnitId::TerranMarine].firstButton[i].reqFunc;
-		customButtonsArray[i].reqStringID = buttonSetTable[UnitId::TerranMarine].firstButton[i].reqStringID;
-		customButtonsArray[i].reqVar = buttonSetTable[UnitId::TerranMarine].firstButton[i].reqVar;
+		customButtonsArray[i].actFunc = buttonSetTable[unitID].firstButton[i].actFunc;
+		customButtonsArray[i].actStringID = buttonSetTable[unitID].firstButton[i].actStringID;
+		customButtonsArray[i].actVar = buttonSetTable[unitID].firstButton[i].actVar;
+		customButtonsArray[i].iconID = buttonSetTable[unitID].firstButton[i].iconID;
+		customButtonsArray[i].position = buttonSetTable[unitID].firstButton[i].position;
+		customButtonsArray[i].reqFunc = buttonSetTable[unitID].firstButton[i].reqFunc;
+		customButtonsArray[i].reqStringID = buttonSetTable[unitID].firstButton[i].reqStringID;
+		customButtonsArray[i].reqVar = buttonSetTable[unitID].firstButton[i].reqVar;
 	}
 
 	return &customButtonSet;
@@ -455,10 +472,15 @@ namespace hooks {
 	//a more customized way.
 	//Note: if you use updateButtonSet_Sub4591D0,
 	//you can disable the injection of this
-	//function in the _inject.cpp file.
+	//function in the _inject.cpp file. 
 	BUTTON_SET* getButtonSet(int index) {
-		return &(buttonSetTable[index]);
 		//if using custom button set, call it with return getCustomButtonSet(&buttonSetTable[index]);
+		//return getCustomButtonSet(&buttonSetTable[index], index);
+		//BUTTON_SET customButtonSet = customButtonSets::getButtonSetOverrides()[index];
+		//if (index == 41) {
+		//	return &customButtonSet;
+		//}		
+		return &(buttonSetTable[index]);
 	}
 
 	; //4599A0  
@@ -693,6 +715,17 @@ void updateButtonSet_Sub4591D0() {
 
 	current_dialog = *BUTTONSET_DIALOG;
 	current_button = current_buttonset->firstButton;
+	BUTTON *actual_current_button;
+	/*
+	NOTE: This needs a significant rework.
+	For now it simply overrides the current_button (firstButton) variable if it can detect that there's an override
+	for the given button set.
+	*/
+	if (customButtonSets::getOverriddenButtons()[*BUTTONSET_PORTRAIT_BUTTONSETID]) {
+		int i = customButtonSets::getOverriddenButtonStartIndex()[*BUTTONSET_PORTRAIT_BUTTONSETID];
+		actual_current_button = &customButtonSets::getButtons()[i];
+		current_button = actual_current_button;
+	}
 	current_button_state = BUTTON_STATE::Invisible;
 
 	if(current_dialog->controlType != DialogControlTypes::DialogBox)
